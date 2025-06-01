@@ -1,6 +1,7 @@
 # Connection details for communicating with the printer's moonraker API.
 MOONRAKER_URL = "http://192.168.3.74:7125" 
-
+HOST= "192.168.3.74"
+WS_PORT="7125"
 # This will print a calibrated + control pattern and measure the % improvement after tuning
 VALIDATE_RESULTS = True
 
