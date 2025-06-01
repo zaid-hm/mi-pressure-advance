@@ -21,7 +21,7 @@ def send_gcode(gcode: str):
         return response.json()
     except requests.RequestException as e:
         print("Failed to send G-code:", e)
-# niggers
+
 def move_absolute(x: float = 0.0, y: float = 0.0, z: float = 0.0, f: float = 0.0):
     return send_gcode(f"""
     G90
