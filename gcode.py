@@ -1,14 +1,28 @@
 import json
 import websocket
 import random
-import requests
 from constants import *
 
-ws = websocket.WebSocket()
-ws.connect(f"ws://{HOST}:{WS_PORT}/websocket")
+# Helper function to automatically generate the coordinate strings
+# for G0 commands.
+def format_move(x: float = None, y: float = None, z: float = None, f: float = None):
+    def format_string(value, prefix):
+        return f" {prefix}{value}" if value is not None else ""
+    return "".join(format_string(value, prefix) for value, prefix in [(x, "x"), (y, "y"), (z, "z"), (f, "f")])
 
-with open(r"pa_patterns.gcode", "r", encoding="utf-8") as file:
-    GCODE_COMMANDS = file.read()
+
+def move_absolute(x: float = None, y: float = None, z: float = None, f: float = None):
+    return send_gcode(f"""
+    G90
+    G0{format_move(x, y, z, f)}
+    """)
+
+
+def move_relative(x: float = None, y: float = None, z: float = None, f: float = None):
+    return send_gcode(f"""
+    G91
+    G0{format_move(x, y, z, f)}
+    """)
 
 
 def send_to_websocket(method: str, args: dict = None):
@@ -24,22 +38,24 @@ def send_to_websocket(method: str, args: dict = None):
 
     print(request)
     ws.send(json.dumps(request))
+    while True:
+        resp = json.loads(ws.recv())
+        # try:
+        #     print(resp["method"])
+        # except Exception as e:
+        #     print(resp)
+        # print(resp.keys())
+        if "id" in resp and resp["id"] == request_id:
+            return resp
 
 
+ws = websocket.WebSocket()
+ws.connect(f"ws://{HOST}:{WS_PORT}/websocket")
 
-def format_move(x: float = 0.0, y: float = 0.0, z: float = 0.0, f: float = 0.0):
-    def format_string(value, prefix):
-        return f" {prefix}{value}" if value is not None else ""
-    return "".join(format_string(value, prefix) for value, prefix in [(x, "x"), (y, "y"), (z, "z"), (f, "f")])
 
 def send_gcode(gcode: str):
     return send_to_websocket("printer.gcode.script", {"script": gcode})
 
-def move_absolute(x: float = 0.0, y: float = 0.0, z: float = 0.0, f: float = 0.0):
-    return send_gcode(f"""
-    G90
-    G0{format_move(x, y, z, f)}
-    """)
 
 def home():
     return send_gcode('G28')
@@ -50,17 +66,16 @@ def has_homed():
                              "objects": {"toolhead": None}})
     return resp["result"]["status"]["toolhead"]["homed_axes"] == "xyz"
 
-def move_relative(x: float = 0.0, y: float = 0.0, z: float = 0.0, f: float = 0.0):
-    return send_gcode(f"""
-    G91
-    G0{format_move(x, y, z, f)}
-    """)
-params = {
-        "toolhead": ""
-    }
 
+# def do_initialization_routine():
+#     if not has_homed():
+#         print("Homing")
+#         home()
+#         # print("Quad Gantry Level")
+#         # send_gcode("QUAD_GANTRY_LEVEL")
+#         # print("Rehoming Z")
+#         # send_gcode("G28 Z")
 
-# MOONRAKER_URL = "http://192.168.3.74:7125/printer/objects/query"
 
 def query_printer_position():
     resp = send_to_websocket("printer.objects.query", {
@@ -86,12 +101,14 @@ def main():
     # print(query_printer_position())
     # do_initialization_routine()
     # print("Finished initializing")
-
-    # # move_absolute(150, 150, 16, 1000000)
-    # # move_absolute(10, 10, 20, 1000000)
-    # # move_absolute(150, 150, 16, 1000000)
-    # print("Done")
+    print(has_homed())
+    move_absolute(150, 150, 16, 1000000)
+    move_absolute(10, 10, 20, 1000000)
+    move_absolute(150, 150, 16, 1000000)
+    print("Done")
 
 
 if __name__ == "__main__":
     main()
+
+# start at x=45, y=305, end at x=109 (leaving 8mm off the start and end for now)
