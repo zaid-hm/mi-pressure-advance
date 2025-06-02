@@ -29,7 +29,7 @@ M109 S{HOTEND_TEMPERATURE};
 
 # Information about the USB camera mounted to the hotend.
 VIDEO_DEVICE = "/dev/video0"
-VIDEO_RESOLUTION = "1920x1080"
+VIDEO_RESOLUTION = "1280x720"
 FRAMERATE = "30"
 # The camera's distance from the nozzle.
 # This tells the recording code how to center the line within the camera's field of view.
@@ -38,7 +38,7 @@ CAMERA_OFFSET_X = 28
 CAMERA_OFFSET_Y = 50.2
 
 # This is the height where the camera and laser are in focus.
-LASER_FOCUS_HEIGHT = 17.86
+LASER_FOCUS_HEIGHT = 13.860
 
 # How the processing code finds the area of interest. Units are in pixels.
 # The crop offsets specify the pixel that the box should be centered on.
