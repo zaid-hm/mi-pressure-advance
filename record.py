@@ -16,7 +16,7 @@ ffmpeg_cmd = [
     "-video_size",
     VIDEO_RESOLUTION,
     "-input_format",
-    "mjpeg",
+    "UYVY",
     "-i",
     VIDEO_DEVICE,
     ]
