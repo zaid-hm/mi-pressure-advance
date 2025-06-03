@@ -44,13 +44,15 @@ def compute_x_value(pixel_values: np.ndarray):
 
 
 def generate_height_data_for_frame(frame: np.ndarray):
+    
+    cv2.imwrite(f"alignment_test/raw.png", frame)
     frame = crop_frame(frame)
-    # cv2.imwrite(f"alignment_test/cropped.png", frame)
+    cv2.imwrite(f"alignment_test/cropped.png", frame)
     frame = preprocess_frame(frame)
-    # cv2.imwrite(f"alignment_test/processed.png", frame)
+    cv2.imwrite(f"alignment_test/processed.png", frame)
     frame = apply_gaussian_blur(frame)
-    # cv2.imwrite(f"alignment_test/blurred.png", frame)
-    # exit()
+    cv2.imwrite(f"alignment_test/blurred.png", frame)
+    return frame
 
     frame_height_data = np.ndarray(frame.shape[0])
 
@@ -67,13 +69,14 @@ def generate_height_data_from_video(video_file: str):
     frame_count = int(video.get(cv2.CAP_PROP_FRAME_COUNT))
     height_data: np.ndarray = np.ndarray((frame_count, CROP_FRAME_SIZE_Y))
 
-    frame_index = 0
+    frame_index = 10
     while video.isOpened():
         ret, frame = video.read()
         if not ret:
             break
         
         height_data[frame_index] = generate_height_data_for_frame(frame)
+        break
         frame_index += 1
 
     return height_data

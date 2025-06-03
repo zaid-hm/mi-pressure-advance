@@ -75,9 +75,7 @@ def generate_pa_tune_gcode(info: PatternInfo, finished_printing=True):
 
 
 def main():
-    # FIXME: this stuff times out when it takes too long for the printer to respond... not sure
-    # how to properly send commands and block until they're finished.  Can I poll for the printer
-    # status?
+  
     gcode = f"""
     G28
     M104 S180; preheat nozzle while waiting for build plate to get to temp
@@ -86,29 +84,29 @@ def main():
     M109 S{HOTEND_TEMPERATURE};
     """
     # PA Patterns
-    control = PatternInfo(
-        0, 0,
-        30, 30,
-        10,
-        30, 4
-    )
+    # control = PatternInfo(
+    #     0, 0,
+    #     30, 30,
+    #     10,
+    #     30, 4
+    # )
     normal_pattern = PatternInfo(
         0, 0.06,
         65, 30,
         10,
         30, 4
     )
-    calibrated = PatternInfo(
-        0.04, 0.04,
-        100, 30,
-        10,
-        30, 4
-    )
+    # calibrated = PatternInfo(
+    #     0.04, 0.04,
+    #     100, 30,
+    #     10,
+    #     30, 4
+    # )
 
 
-    gcode += generate_pa_tune_gcode(control)
+    # gcode += generate_pa_tune_gcode(control)
     gcode += generate_pa_tune_gcode(normal_pattern)
-    gcode += generate_pa_tune_gcode(calibrated)
+    # gcode += generate_pa_tune_gcode(calibrated)
 
     # Reset PA so I don't forget.
     gcode += """

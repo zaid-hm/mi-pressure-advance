@@ -38,7 +38,7 @@ CAMERA_OFFSET_X = 12.324
 CAMERA_OFFSET_Y = 67.224
 
 # This is the height where the camera and laser are in focus.
-LASER_FOCUS_HEIGHT = 13.860
+LASER_FOCUS_HEIGHT = 17.86
 
 # How the processing code finds the area of interest. Units are in pixels.
 # The crop offsets specify the pixel that the box should be centered on.

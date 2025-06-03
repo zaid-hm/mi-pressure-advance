@@ -16,12 +16,14 @@ ffmpeg_cmd = [
     "-video_size",
     VIDEO_RESOLUTION,
     "-input_format",
-    "uyvy422",
+    "mjpeg",
     "-i",
     VIDEO_DEVICE,
     ]
 
 
+# TODO: make this return a list of files that are saved
+# TODO: make this save to a unique folder each run (maybe this should be passed in?)
 def record_pattern(info: PatternInfo, buffer_distance: float, output_directory: str) -> list:
     # send_gcode("STATUS_OFF") # Turn off LEDs
     send_gcode("LASER_ON") # Turn on line laser
