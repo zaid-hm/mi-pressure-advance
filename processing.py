@@ -3,8 +3,8 @@ import cv2
 import numpy as np
 
 def crop_frame(frame):
-    mid_y = 720//2 + CROP_Y_OFFSET
-    mid_x = 1280//2 + CROP_X_OFFSET
+    mid_y = 1080//2 + CROP_Y_OFFSET
+    mid_x = 1080//2 + CROP_X_OFFSET
     half_y = CROP_FRAME_SIZE_Y / 2
     half_x = CROP_FRAME_SIZE_X / 2
     frame = frame[int(mid_y-half_y):int(mid_y+half_y), int(mid_x-half_x):int(mid_x+half_x)]

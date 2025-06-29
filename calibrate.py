@@ -8,6 +8,7 @@ from pattern_info import PatternInfo
 from analysis import generate_height_data_from_video
 import shutil
 import subprocess
+import numpy as np
 
 
 # send_gcode("LASER_OFF")
@@ -21,6 +22,7 @@ normal_pattern = PatternInfo(
     30, 4
 )
 # gcode= generate_pa_tune_gcode(normal_pattern)
+# send_gcode(PRINT_START)
 # send_gcode(gcode)
 # send_gcode("G90;")
 # send_gcode(f"G1 X{FINISHED_X} Y{FINISHED_Y} F30000")
@@ -31,7 +33,7 @@ normal_pattern = PatternInfo(
 
 results = []
 home()
-
+send_gcode("LASER_ON")
 results = []
 
 with tempfile.TemporaryDirectory("pa_videos") as dir:
@@ -41,3 +43,6 @@ with tempfile.TemporaryDirectory("pa_videos") as dir:
             results.append(
                 generate_height_data_from_video(video_file)
             )
+print(results)
+from synthetic import plot_height_map
+plot_height_map(results[0])

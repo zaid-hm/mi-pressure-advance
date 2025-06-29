@@ -2,7 +2,7 @@ import json
 import websocket
 import random
 from constants import *
-
+import time
 # Helper function to automatically generate the coordinate strings
 # for G0 commands.
 def format_move(x: float = None, y: float = None, z: float = None, f: float = None):
@@ -36,25 +36,51 @@ def send_to_websocket(method: str, args: dict = None):
     if args is not None:
         request["params"] = args
 
-    print(request)
+    # print(request)
     ws.send(json.dumps(request))
     while True:
-        resp = json.loads(ws.recv())
-        # try:
-        #     print(resp["method"])
-        # except Exception as e:
-        #     print(resp)
-        # print(resp.keys())
+        raw = ws.recv()
+        if not raw:
+            print("WebSocket returned empty response!")
+            continue  # or handle/reconnect as appropriate
+
+        try:
+            resp = json.loads(raw)
+        except json.JSONDecodeError as e:
+            print(f"Failed to decode JSON: {raw}")
+            continue  # or handle/reconnect as appropriate
+
         if "id" in resp and resp["id"] == request_id:
             return resp
 
 
 ws = websocket.WebSocket()
 ws.connect(f"ws://{HOST}:{WS_PORT}/websocket")
+def connect_ws():
 
+    ws = websocket.WebSocket()
+    ws.connect(f"ws://{HOST}:{WS_PORT}/websocket")
+    return ws
 
 def send_gcode(gcode: str):
     return send_to_websocket("printer.gcode.script", {"script": gcode})
+
+def send_gcode_with_retry(gcode, retries=3, delay=2):
+    global ws
+    for attempt in range(retries):
+        try:
+            send_gcode(gcode)
+            return
+        except (ConnectionResetError, websocket.WebSocketConnectionClosedException, OSError) as e:
+            print(f"WebSocket error: {e} (attempt {attempt+1} of {retries})")
+            try:
+                ws.close()
+            except Exception:
+                pass
+            ws = connect_ws()
+            time.sleep(delay)
+    print("Failed to send G-code after several retries.")
+
 
 
 def home():

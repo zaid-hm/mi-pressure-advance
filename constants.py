@@ -2,6 +2,7 @@
 MOONRAKER_URL = "http://192.168.3.74:7125" 
 HOST= "192.168.3.74"
 WS_PORT="7125"
+MJPEG_STREAM_URL = f"http://{HOST}/webcam/?action=stream"
 # This will print a calibrated + control pattern and measure the % improvement after tuning
 VALIDATE_RESULTS = True
 
@@ -29,7 +30,7 @@ M109 S{HOTEND_TEMPERATURE};
 
 # Information about the USB camera mounted to the hotend.
 VIDEO_DEVICE = "/dev/video0"
-VIDEO_RESOLUTION = "1280x720"
+VIDEO_RESOLUTION = "1920x1080"
 FRAMERATE = "30"
 # The camera's distance from the nozzle.
 # This tells the recording code how to center the line within the camera's field of view.
@@ -42,13 +43,13 @@ LASER_FOCUS_HEIGHT = 17.86
 
 # How the processing code finds the area of interest. Units are in pixels.
 # The crop offsets specify the pixel that the box should be centered on.
-CROP_X_OFFSET = 220
+CROP_X_OFFSET = 375
 # In my case, the crop Y offset should be zero, but my offset Y value above is slightly off.
 # You can kind of tweak these if you find that things aren't quite right.
-CROP_Y_OFFSET = 11
+CROP_Y_OFFSET = 40
 # How big the area around the laser should be cropped to.
-CROP_FRAME_SIZE_X = 45
-CROP_FRAME_SIZE_Y = 60
+CROP_FRAME_SIZE_X = 65
+CROP_FRAME_SIZE_Y = 86
 
 # Sometimes ffmpeg is slow to close. If we start moving too early, 
 # we might accidentally record stuff we don't want to.

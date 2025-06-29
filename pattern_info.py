@@ -11,5 +11,8 @@ class PatternInfo:
         self.line_length = line_length
         self.spacing = spacing
 
+    def pa_values(self):
+        return self.pa_values
+
     def lines_start_y(self):
         return [(x * self.spacing) + self.start_y for x in range(len(self.pa_values))]

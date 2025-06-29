@@ -23,9 +23,9 @@ def generate_pa_results_for_pattern(pattern_info: PatternInfo)-> list[PaResult]:
         video_files = record_pattern(pattern_info, 4, dir)
 
         for video_file in video_files:
-            results.append(
-                pa_score_from_video_file(video_file)
-            )
+            s=pa_score_from_video_file(video_file)
+            results.append(s)
+            print(s)
     return results
 
 
@@ -37,10 +37,11 @@ def main():
         30, 4
     )
 
-    g.send_gcode(PRINT_START)
-    g.send_gcode(generate_pa_tune_gcode(calibration_pattern))
-    g.wait_until_printer_at_location(FINISHED_X, FINISHED_Y)
-    g.send_gcode(f"M104 S{HOTEND_IDLE_TEMP}; let the hotend cool")
+    # g.send_gcode(PRINT_START)
+    # g.send_gcode(generate_pa_tune_gcode(calibration_pattern))
+    # g.wait_until_printer_at_location(FINISHED_X, FINISHED_Y)
+    # g.send_gcode(f"M104 S{HOTEND_IDLE_TEMP}; let the hotend cool")
+    g.send_gcode("G28")
 
     results = generate_pa_results_for_pattern(calibration_pattern)
         
