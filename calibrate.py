@@ -1,6 +1,6 @@
 import tempfile
 from gcode import *
-from main import generate_pa_results_for_pattern
+from generate_results import generate_pa_results_for_pattern
 from pa import *
 from pa_result import PaResult
 from record import record_pattern

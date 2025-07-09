@@ -1,6 +1,6 @@
 from pprint import pprint
 import gcode as g
-from main import generate_pa_results_for_pattern, PRINT_START
+from generate_results import generate_pa_results_for_pattern, PRINT_START
 from pa import *
 from pa_result import PaResult
 import pickle
